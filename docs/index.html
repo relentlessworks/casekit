@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>casekit — agentic-first case conversion service</title>
+<style>
+:root { --bg: #0d1117; --fg: #c9d1d9; --accent: #58a6ff; --card: #161b22; --border: #30363d; --mono: ui-monospace, SFMono-Regular, monospace; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: -apple-system, system-ui, sans-serif; line-height: 1.6; }
+.container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+h1 span { color: var(--accent); }
+.tagline { color: #8b949e; font-size: 1.1rem; margin-bottom: 2rem; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; }
+.card h2 { color: var(--accent); margin-bottom: 0.75rem; font-size: 1.2rem; }
+code { font-family: var(--mono); background: #1c2128; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+pre { background: #1c2128; border-radius: 6px; padding: 1rem; overflow-x: auto; margin: 0.5rem 0; }
+pre code { background: none; padding: 0; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.badge { display: inline-block; background: #1c2128; border: 1px solid var(--border); border-radius: 16px; padding: 0.2rem 0.7rem; font-size: 0.85rem; margin: 0.2rem; }
+.footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); color: #8b949e; font-size: 0.9rem; }
+table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; }
+th, td { text-align: left; padding: 0.5rem; border-bottom: 1px solid var(--border); }
+th { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>case<span>kit</span></h1>
+<p class="tagline">Agentic-first case conversion service. Convert between camelCase, snake_case, kebab-case, PascalCase, and 9 more formats. Detect case, convert to all at once. Plain text API, agent-driven, single Go binary.</p>
+
+<div class="card">
+<h2>Endpoints</h2>
+<div class="grid">
+<div>
+<p><code>GET /convert</code> — Convert to specific case</p>
+<p><code>GET /detect</code> — Detect case type</p>
+<p><code>GET /all</code> — Convert to all formats</p>
+<p><code>GET /camel</code> — → camelCase</p>
+<p><code>GET /pascal</code> — → PascalCase</p>
+<p><code>GET /snake</code> — → snake_case</p>
+<p><code>GET /screaming-snake</code> — → SCREAMING_SNAKE</p>
+</div>
+<div>
+<p><code>GET /kebab</code> — → kebab-case</p>
+<p><code>GET /screaming-kebab</code> — → SCREAMING-KEBAB</p>
+<p><code>GET /dot</code> — → dot.case</p>
+<p><code>GET /title</code> — → Title Case</p>
+<p><code>GET /sentence</code> — → Sentence case</p>
+<p><code>GET /flat</code> — → flatcase</p>
+<p><code>GET /train</code> — → Train-Case</p>
+<p><code>GET /alternating</code> — → aLtErNaTiNg</p>
+<p><code>GET /inverse</code> — → swap case</p>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2>Quick Start</h2>
+<pre><code># Convert to a specific case
+curl "http://localhost:7101/convert?text=hello_world&to=camel"
+# camel=helloWorld
+
+# Detect the case type
+curl "http://localhost:7101/detect?text=helloWorld"
+# detected=camel name=camelCase
+
+# Convert to all formats at once
+curl "http://localhost:7101/all?text=helloWorld"
+# camel=helloWorld
+# pascal=HelloWorld
+# snake=hello_world
+# screaming_snake=HELLO_WORLD
+# kebab=hello-world
+# ...
+
+# Direct conversion endpoints
+curl "http://localhost:7101/snake?text=helloWorld"
+# snake=hello_world</code></pre>
+</div>
+
+<div class="card">
+<h2>Supported Cases</h2>
+<table>
+<tr><th>Case</th><th>Example</th><th>Description</th></tr>
+<tr><td><code>camel</code></td><td>helloWorld</td><td>First word lowercase, rest capitalized</td></tr>
+<tr><td><code>pascal</code></td><td>HelloWorld</td><td>All words capitalized</td></tr>
+<tr><td><code>snake</code></td><td>hello_world</td><td>Lowercase, underscore separator</td></tr>
+<tr><td><code>screaming_snake</code></td><td>HELLO_WORLD</td><td>Uppercase, underscore separator</td></tr>
+<tr><td><code>kebab</code></td><td>hello-world</td><td>Lowercase, hyphen separator</td></tr>
+<tr><td><code>screaming_kebab</code></td><td>HELLO-WORLD</td><td>Uppercase, hyphen separator</td></tr>
+<tr><td><code>dot</code></td><td>hello.world</td><td>Lowercase, dot separator</td></tr>
+<tr><td><code>title</code></td><td>Hello World</td><td>All words capitalized, space separator</td></tr>
+<tr><td><code>sentence</code></td><td>Hello world</td><td>First word capitalized, space separator</td></tr>
+<tr><td><code>flat</code></td><td>helloworld</td><td>All lowercase, no separator</td></tr>
+<tr><td><code>train</code></td><td>Hello-World</td><td>All words capitalized, hyphen separator</td></tr>
+<tr><td><code>alternating</code></td><td>hElLo</td><td>Alternating lower/upper per character</td></tr>
+<tr><td><code>inverse</code></td><td>hELLOwORLD</td><td>Swap case of each character</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h2>Principles</h2>
+<span class="badge">Plain text by default</span>
+<span class="badge">JSON on demand</span>
+<span class="badge">Instructive errors</span>
+<span class="badge">Self-documenting</span>
+<span class="badge">MCP connector</span>
+<span class="badge">Single Go binary</span>
+<span class="badge">Zero config</span>
+<span class="badge">No database</span>
+</div>
+
+<div class="card">
+<h2>MCP</h2>
+<p><code>POST /mcp</code> — JSON-RPC 2.0 with 16 tools for chat client integrations.</p>
+</div>
+
+<div class="footer">
+<p><a href="https://github.com/relentlessworks/casekit">GitHub Repository</a> · MIT License · Part of <a href="https://github.com/relentlessworks">relentlessworks</a></p>
+</div>
+</div>
+</body>
+</html>

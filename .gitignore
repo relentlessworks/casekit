@@ -1,0 +1,5 @@
+/casekit
+*.exe
+*.dll
+*.so
+*.dylib
